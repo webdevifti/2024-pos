@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class CustomerController extends Controller
 {
@@ -16,18 +17,8 @@ class CustomerController extends Controller
     public function index()
     {
         //
-        $all_customer = Customer::all();
+        $all_customer = Customer::latest('created_at')->get();
         return view('customer.index', compact('all_customer'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -41,43 +32,27 @@ class CustomerController extends Controller
         //
         $request->validate([
             'name' => 'required',
-            'phone_number' => 'required|unique:customers'
+            'phone_number' => 'required|unique:customers|max:11'
         ]);
 
         try{
             Customer::create([
                 'fullname' => $request->name,
                 'phone_number' => $request->phone_number,
+                'email' => $request->email,
+                'address' => $request->address,
+                'join_date' => Carbon::today(),
+                'notes' => $request->notes,
+                'gender' => $request->gender,
                 'status' => $request->status
             ]);
-            return back()->with('success','Customer Added Successfully.');
+            return back()->with('success','New ustomer has been added.');
         }catch(Exception $e){
             return back()->with('error','Something happened wrong');
         }
        
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Customer  $customer
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Customer $customer)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Customer  $customer
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Customer $customer)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
@@ -91,16 +66,20 @@ class CustomerController extends Controller
         //
         $request->validate([
             'name' => 'required',
-            'phone_number' => 'required|unique:customers'
+            'phone_number' => 'required|max:11'
         ]);
 
         try{
-            Customer::find($customer)->update([
+            Customer::where('id',$customer)->update([
                 'fullname' => $request->name,
                 'phone_number' => $request->phone_number,
+                'email' => $request->email,
+                'address' => $request->address,
+                'notes' => $request->notes,
+                'gender' => $request->gender,
                 'status' => $request->status
             ]);
-            return back()->with('success','Customer Updated Successfully.');
+            return back()->with('success','Customer information has been updated.');
         }catch(Exception $e){
             return back()->with('error','Something happened wrong');
         }
@@ -119,7 +98,7 @@ class CustomerController extends Controller
         $customer = Customer::find($customer);
         try{
             $customer->delete();
-            return back()->with('success', 'Deleted');
+            return back()->with('success', 'Customer has been deleted');
         }catch(Exception $e){
             return back()->with('error','Something wrong');
         }

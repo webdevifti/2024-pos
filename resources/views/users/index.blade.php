@@ -150,7 +150,7 @@
                                         
                                         </div>
                                         <div class="modal-footer">
-                                            <a class="btn btn-danger" href="{{ route('users.destroy',$item->id) }}"
+                                            <a class="btn btn-danger  btn-sm" href="{{ route('users.destroy',$item->id) }}"
                                             onclick="event.preventDefault();
                                                         document.getElementById('delete-form').submit();">
                                             {{ __('Delete') }}
@@ -161,7 +161,7 @@
                                             @method('DELETE')
                                         </form>
 
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
                                     
                                         </div>
                                     </div>
