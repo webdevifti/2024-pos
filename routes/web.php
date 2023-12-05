@@ -26,11 +26,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('login');
 });
-
 Auth::routes(['register' => false]);
-
 Route::get('/home', [HomeController::class, 'index'])->name('home');
-
 Route::group(['middleware' => ['protectRoute']], function(){
     Route::resources([
         '/orders' => OrderController::class,
@@ -38,12 +35,12 @@ Route::group(['middleware' => ['protectRoute']], function(){
         '/companies' => CompanyController::class,
         '/products' => ProductController::class,
         '/transactions' => TransactionController::class,
-        '/customers' => CustomerController::class,
+        '/settings' => SettingController::class,
     ]);
     Route::group(['middleware' => ['authorizationRoute']], function(){
         Route::resources([
             '/users' => UserController::class,
-            '/settings' => SettingController::class,
+            '/customers' => CustomerController::class,
         ]);
     });
 });
