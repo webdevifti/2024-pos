@@ -12,6 +12,22 @@
             <form action="{{ route('orders.store') }}" method="POST">
                 @csrf
                 <div class="row">
+                    <div class="mb-2 mt-2">
+                        <div class="d-flex align-items-end justify-content-start gap-3">
+                            <div>
+                                <label for="">Customer</label>
+                                <select name="customer_id" class="form-control" required>
+                                    <option value="">--select customer--</option>
+                                    @foreach ($get_active_customer as $customer)
+                                    <option value="{{ $customer->id }}">{{ $customer->fullname }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#newcustomerModal">New Customer</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
                     <div class="col-md-9 col-lg-9">
                         <div class="card mb-4">
                             <div class="card-header">
@@ -113,16 +129,6 @@
                                     <input type="text" class="form-control due" name="due" readonly>
                                 <label for="">Change</label>
                                 <input type="text" class="form-control return" name="return" readonly>
-
-                                <div class="mb-2 mt-2">
-                                    <label for="">Customer</label>
-                                    <select name="customer_id" class="form-control" required>
-                                        <option value="">customer</option>
-                                        @foreach ($get_active_customer as $customer)
-                                            <option value="{{ $customer->id }}">{{ $customer->fullname }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
                             </div>
 
                         </div>
@@ -131,6 +137,53 @@
                 </div>
             </form>
 
+            <div class="modal fade" id="newcustomerModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteConfirmationLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="deleteConfirmationLabel">New Customer</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form  action="{{ route('customers.store') }}" method="POST">
+                            @csrf
+                            <div class="mb-2">
+                                <input type="text" placeholder="Name" name="name" class="form-control" required>
+                            </div>
+                            <div class="mb-2">
+                                <input type="text" placeholder="Phone Number" name="phone_number" class="form-control" required>
+                            </div>
+                            <div class="mb-2">
+                                <input type="text" placeholder="Email" name="email" class="form-control">
+                            </div>
+                            <div class="mb-2">
+                                <input type="text" placeholder="Address" name="address" class="form-control" required>
+                            </div>
+                            <div class="mb-2">
+                                <textarea name="notes" id="" cols="30" rows="4" placeholder="Notes" class="form-control"></textarea>
+                            </div>
+                            <div class="mb-2">
+                                <select name="gender" class="form-control">
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                </select>
+                            </div>
+                            <div class="mb-2">
+                                <select name="status" class="form-control">
+                                    <option value="1">Active</option>
+                                    <option value="0">Inactive</option>
+                                </select>
+                            </div>
+                      
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary btn-sm">Save</button>
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+                </div>
+                </div>
+            </div>
         </div>
     </main>
 
