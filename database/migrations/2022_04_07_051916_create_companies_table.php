@@ -15,12 +15,18 @@ return new class extends Migration
     {
         Schema::create('companies', function (Blueprint $table) {
             $table->id();
-            $table->string('company_name')->default('Laravel Pos');
-            $table->string('company_address')->default('company address');
-            $table->string('company_phone')->default('company phone');
-            $table->string('company_email')->default('company email');
-            $table->string('company_fax')->default('company fax');
+            $table->string('company_name')->nullable();
+            $table->string('company_address')->nullable();
+            $table->string('company_phone')->nullable();
+            $table->string('company_email')->nullable();
+            $table->string('business_type')->nullable();
+            $table->string('taxID')->nullable();
+            $table->dateTime('registration_date')->nullable();
+            $table->mediumText('notes')->nullable();
+            $table->tinyInteger('status')->default(1)->comment("1: active 0: inactive");
             $table->timestamps();
+            $table->softDeletes();
+
         });
     }
 

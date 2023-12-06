@@ -16,7 +16,7 @@ class ProductController extends Controller
     public function index()
     {
         //
-        $products = Product::all();
+        $products = Product::latest('id')->get();
         return view('products.index', compact('products'));
     }
 
@@ -28,6 +28,7 @@ class ProductController extends Controller
     public function create()
     {
         //
+        return view('products.create');
     }
 
     /**
@@ -42,10 +43,9 @@ class ProductController extends Controller
 
         $request->validate([
             'product_name' => 'required',
-            'product_description' => 'required',
             'quantity' => 'required',
-            'price' => 'required',
-            'brand' => 'required'            
+            'price' => 'required',       
+            'unit' => 'required',          
         ]);
 
         try{
@@ -54,7 +54,8 @@ class ProductController extends Controller
                 'product_description' => $request->product_description,
                 'quantity' => $request->quantity,
                 'price' => $request->price,
-                'brand' => $request->brand
+                'brand' => $request->brand,
+                'unit' => $request->unit,
             ]); 
             return back()->with('success','Product has been added successfully');
         }catch(Exception $e){
@@ -68,9 +69,10 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function show(Product $product)
+    public function show($product)
     {
         //
+       
     }
 
     /**
@@ -79,9 +81,12 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function edit(Product $product)
+    public function edit($product)
     {
         //
+        $product = Product::findOrFail($product);
+        return view('products.edit', compact('product'));
+
     }
 
     /**
@@ -97,11 +102,9 @@ class ProductController extends Controller
         // dd($request->all());
         $request->validate([
             'product_name' => 'required',
-            'product_description' => 'required',
             'quantity' => 'required',
             'price' => 'required',
-            'stock' => 'required',
-            'brand' => 'required'            
+            'unit' => 'required'         
         ]);
 
         try{
@@ -111,7 +114,7 @@ class ProductController extends Controller
                 'quantity' => $request->quantity,
                 'price' => $request->price,
                 'brand' => $request->brand,
-                'alert_stock' => $request->stock,
+                'unit' => $request->unit,
                 'status' => $request->status
             ]); 
             return back()->with('success','Product has been updated successfully');

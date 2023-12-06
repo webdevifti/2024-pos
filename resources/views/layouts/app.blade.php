@@ -13,19 +13,26 @@
         <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
        
     </head>
-    <body class="sb-nav-fixed">
+    <body class="sb-nav-fixed  @if(request()->is('pos/orders')) sb-sidenav-toggled @endif">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
             <!-- Navbar Brand-->
             <a class="navbar-brand ps-3" href="{{ route('home') }}">Pos</a>
             <!-- Sidebar Toggle-->
+            @if(!request()->is('pos/orders')) 
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
+           @endif
+            @if(request()->is('pos/orders')) 
+            <a class="nav-link" href="{{ route('home') }}">Dashboard</a>
+            <a class="nav-link" href="{{ route('products.index') }}">Producs</a>
+            @endif
             <!-- Navbar Search-->
-            <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
+            {{-- <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
                 <div class="input-group">
                     <input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..." aria-describedby="btnNavbarSearch" />
                     <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button>
                 </div>
-            </form>
+            </form> --}}
+            <div class="d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0"></div>
             <!-- Navbar-->
             <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
                 <li class="nav-item dropdown">
@@ -49,6 +56,7 @@
             </ul>
         </nav>
         <div id="layoutSidenav">
+            @if(!request()->is('pos/orders'))
             <div id="layoutSidenav_nav">
                 <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                     <div class="sb-sidenav-menu">
@@ -59,16 +67,16 @@
                                 Dashboard
                             </a>
                            
-                            
+                            <a class="nav-link {{ (request()->is('pos/orders') ? 'active': '') }}" href="{{ route('pos.order') }}">
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-cart-shopping"></i></div>
+                                Pos
+                            </a>
                            
                             <a class="nav-link {{ (request()->is('products') ? 'active': '') }}" href="{{ route('products.index') }}">
                                 <div class="sb-nav-link-icon"><i class="fa-brands fa-product-hunt"></i></div>
                                 Products
                             </a>
-                            <a class="nav-link {{ (request()->is('orders') ? 'active': '') }}" href="{{ route('orders.index') }}">
-                                <div class="sb-nav-link-icon"><i class="fa-solid fa-cart-shopping"></i></div>
-                                Make Orders
-                            </a>
+                            
 
                             @if(Auth::user()->role == 'owner')
                             <a class="nav-link {{ (request()->is('users') ? 'active': '') }}" href="{{ route('users.index') }}">
@@ -78,6 +86,10 @@
                             <a class="nav-link {{ (request()->is('customers') ? 'active': '') }}" href="{{ route('customers.index') }}">
                                 <div class="sb-nav-link-icon"><i class="fa-solid fa-users"></i></div>
                                 Customer
+                            </a>
+                            <a class="nav-link {{ (request()->is('companies') ? 'active': '') }}" href="{{ route('companies.index') }}">
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-users"></i></div>
+                                Companies
                             </a>
                             @endif
                             <a class="nav-link {{ (request()->is('settings') ? 'active': '') }}" href="{{ route('settings.index') }}">
@@ -93,13 +105,14 @@
                     </div>
                 </nav>
             </div>
+            @endif
             <div id="layoutSidenav_content">
                 @yield('content')
 
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid px-4">
                         <div class="d-flex align-items-center justify-content-between small">
-                            <div class="text-muted">Copyright &copy; Your Website 2022</div>
+                            <div class="text-muted">Copyright &copy; developed by <a href="https://webdevifti.com">webdevifti</a> 2023 - {{ date('Y') }}</div>
                             <div>
                                 <a href="#">Privacy Policy</a>
                                 &middot;

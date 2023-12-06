@@ -16,8 +16,7 @@ class OrderController extends Controller
     public function index()
     {
         //
-        $get_active_product = Product::where('status', 1)->get();
-        return view('orders.index', compact('get_active_product'));
+       
     }
 
     /**
@@ -85,5 +84,10 @@ class OrderController extends Controller
     public function destroy(Order $order)
     {
         //
+    }
+
+    public function pos(){
+        $get_active_product = Product::where('status', 1)->get();
+        return view('pos.index',compact('get_active_product'));
     }
 }

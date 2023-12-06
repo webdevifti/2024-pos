@@ -1,17 +1,17 @@
 @extends('layouts.app')
-@section('title', 'Customer Management')
+@section('title', 'Company Management')
 @section('content')
 <main>
     <div class="container-fluid px-4">
-        <h1 class="mt-4">Customers</h1>
+        <h1 class="mt-4">Companies</h1>
         <ol class="breadcrumb mb-4">
             <li class="breadcrumb-item"><a href="{{ route('home') }}">Dashboard</a></li>
-            <li class="breadcrumb-item active">Customer</li>
+            <li class="breadcrumb-item active">Company</li>
         </ol>    
         {{-- <a class="btn btn-success mb-4" href="{{ route('users.create') }}"></a> --}}
         <!-- Button trigger modal -->
         <button type="button" class="btn btn-primary mb-4" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-            Add New Customer
+            Add New Company
         </button>
 
         <!-- Modal -->
@@ -19,11 +19,11 @@
             <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Add new customer</h5>
+                <h5 class="modal-title" id="staticBackdropLabel">Add new company</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('customers.store') }}" method="POST">
+                    <form action="{{ route('companies.store') }}" method="POST">
                         @csrf
                         <div class="mb-2">
                             <input type="text" placeholder="Name" name="name" class="form-control" required>
@@ -32,25 +32,19 @@
                             <input type="text" placeholder="Phone Number" name="phone_number" class="form-control" required>
                         </div>
                         <div class="mb-2">
-                            <input type="text" placeholder="Email" name="email" class="form-control">
+                            <input type="text" placeholder="Email" name="email" class="form-control" required>
                         </div>
                         <div class="mb-2">
                             <input type="text" placeholder="Address" name="address" class="form-control" required>
                         </div>
                         <div class="mb-2">
+                            <input type="text" placeholder="Type" name="type" class="form-control">
+                        </div>
+                        <div class="mb-2">
+                            <input type="text" placeholder="TaxID" name="taxID" class="form-control">
+                        </div>
+                        <div class="mb-2">
                             <textarea name="notes" id="" cols="30" rows="4" placeholder="Notes" class="form-control"></textarea>
-                        </div>
-                        <div class="mb-2">
-                            <select name="gender" class="form-control">
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
-                            </select>
-                        </div>
-                        <div class="mb-2">
-                            <select name="status" class="form-control">
-                                <option value="1">Active</option>
-                                <option value="0">Inactive</option>
-                            </select>
                         </div>
                   
                 </div>
@@ -67,7 +61,7 @@
         <div class="card mb-4">
             <div class="card-header">
                 <i class="fas fa-table me-1"></i>
-                 Customer List
+                 Company List
             </div>
             <div class="card-body">
                 <table id="datatablesSimple">
@@ -77,29 +71,25 @@
                             <th>Phone</th>
                             <th>Email</th>
                             <th>Address</th>
-                            <th>Points</th>
-                            <th>Due</th>
-                            <th>Total Spent</th>
+                            <th>Type</th>
+                            <th>TaxID</th>
                             <th>Join Date</th>
-                            <th>Last Purchase Date</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                    
                     <tbody>
-                        @foreach ($all_customer as $item)
+                        @foreach ($companies as $item)
                             
                         <tr>
-                            <td>{{ $item->fullname }}</td>
-                            <td>{{ $item->phone_number }}</td>
-                            <td>{{ $item->email }}</td>
-                            <td>{{ $item->address }}</td>
-                            <td>{{ $item->points }}</td>
-                            <td>{{ $item->due }}</td>
-                            <td>{{ $item->total_spent }}</td>
-                            <td>{{ date('m-d-Y', strtotime($item->join_date)) }}</td>
-                            <td>{{ date('m-d-Y', strtotime($item->last_purchase_date)) }}</td>
+                            <td>{{ $item->company_name }}</td>
+                            <td>{{ $item->company_phone }}</td>
+                            <td>{{ $item->company_email }}</td>
+                            <td>{{ $item->company_address }}</td>
+                            <td>{{ $item->business_type }}</td>
+                            <td>{{ $item->taxID }}</td>
+                            <td>{{ date('m-d-Y', strtotime($item->registration_date)) }}</td>
                             <td>
                                 @if($item->status == 1)
                                     <span class="badge bg-success">Active</span>
@@ -114,40 +104,41 @@
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h5 class="modal-title" id="editationLabel">Update Customer Info</h5>
+                                                <h5 class="modal-title" id="editationLabel">Update Company Info</h5>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
-                                                <form action="{{ route('customers.update', $item->id) }}" method="POST">
+                                                <form action="{{ route('companies.update', $item->id) }}" method="POST">
                                                     @csrf
                                                     @method('PUT')
                                                     <div class="mb-4">
-                                                        <input type="text" placeholder="Name" name="name" class="form-control" required value="{{ $item->fullname }}">
+                                                        <input type="text" placeholder="Name" name="name" class="form-control" required value="{{ $item->company_name }}">
                                                     </div>
                                                     <div class="mb-4">
-                                                        <input type="text" placeholder="Phone" name="phone_number" value="{{ $item->phone_number }}" class="form-control" required>
+                                                        <input type="text" placeholder="Phone" name="phone_number" value="{{ $item->company_phone }}" class="form-control" required>
                                                     </div>
                                                     <div class="mb-2">
-                                                        <input type="text" placeholder="Email" name="email" class="form-control"  value="{{ $item->email }}">
+                                                        <input type="text" placeholder="Email" name="email" class="form-control"  value="{{ $item->company_email }}" required>
                                                     </div>
                                                     <div class="mb-2">
-                                                        <input type="text" placeholder="Address" name="address" class="form-control" required  value="{{ $item->address }}">
+                                                        <input type="text" placeholder="Address" name="address" class="form-control" required  value="{{ $item->company_address }}">
+                                                    </div>
+                                                    <div class="mb-2">
+                                                        <input type="text" placeholder="Type" value="{{ $item->business_type }}" name="type" class="form-control">
+                                                    </div>
+                                                    <div class="mb-2">
+                                                        <input type="text" placeholder="TaxID" name="taxID" class="form-control" value="{{ $item->taxID }}">
                                                     </div>
                                                     <div class="mb-2">
                                                         <textarea name="notes" id="" cols="30" rows="4" placeholder="Notes" class="form-control"> {{ $item->notes }}</textarea>
                                                     </div>
-                                                    <div class="mb-2">
-                                                        <select name="gender" class="form-control">
-                                                            <option {{ ($item->gender == 'male' ? 'selected': '' ) }} value="male">Male</option>
-                                                            <option {{ ($item->gender == 'female' ? 'selected': '' ) }} value="female">Female</option>
-                                                        </select>
-                                                    </div>
                                                     <div class="mb-4">
-                                                        <select name="status" class="form-control" >
+                                                        <select name="status" class="form-control">
                                                             <option {{ ($item->status == 1 ? 'selected': '' ) }} value="1">Active</option>
                                                             <option {{ ($item->status == 0 ? 'selected': '' ) }}  value="0">Deactive</option>
                                                         </select>
                                                     </div>
+                                                    
                                                    
                                                     <button type="submit" class="btn btn-primary">Update</button>
                                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -174,13 +165,13 @@
                                         
                                         </div>
                                         <div class="modal-footer">
-                                            <a class="btn btn-danger btn-sm" href="{{ route('customers.destroy',$item->id) }}"
+                                            <a class="btn btn-danger btn-sm" href="{{ route('companies.destroy',$item->id) }}"
                                             onclick="event.preventDefault();
                                                         document.getElementById('delete-form').submit();">
                                             {{ __('Delete') }}
                                         </a>
 
-                                        <form id="delete-form" action="{{ route('customers.destroy', $item->id) }}" method="POST" class="d-none">
+                                        <form id="delete-form" action="{{ route('companies.destroy', $item->id) }}" method="POST" class="d-none">
                                             @csrf
                                             @method('DELETE')
                                         </form>

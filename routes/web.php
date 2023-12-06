@@ -37,6 +37,7 @@ Route::group(['middleware' => ['protectRoute']], function(){
         '/transactions' => TransactionController::class,
         '/settings' => SettingController::class,
     ]);
+    Route::get('/pos/orders',[OrderController::class,'pos'])->name('pos.order');
     Route::group(['middleware' => ['authorizationRoute']], function(){
         Route::resources([
             '/users' => UserController::class,

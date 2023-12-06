@@ -46,7 +46,7 @@ class CustomerController extends Controller
                 'gender' => $request->gender,
                 'status' => $request->status
             ]);
-            return back()->with('success','New ustomer has been added.');
+            return back()->with('success','New customer has been added.');
         }catch(Exception $e){
             return back()->with('error','Something happened wrong');
         }
