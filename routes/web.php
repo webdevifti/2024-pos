@@ -38,6 +38,7 @@ Route::group(['middleware' => ['protectRoute']], function(){
         '/settings' => SettingController::class,
     ]);
     Route::get('/pos/orders',[OrderController::class,'pos'])->name('pos.order');
+    Route::get('/pos/order/invoice/{order_id}',[OrderController::class,'posInvoice'])->name('pos.invoice');
     Route::group(['middleware' => ['authorizationRoute']], function(){
         Route::resources([
             '/users' => UserController::class,

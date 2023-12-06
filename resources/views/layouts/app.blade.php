@@ -14,6 +14,7 @@
        
     </head>
     <body class="sb-nav-fixed">
+        @auth
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
             <!-- Navbar Brand-->
             <a class="navbar-brand ps-3" href="{{ route('home') }}">Pos</a>
@@ -33,6 +34,7 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        
                         @if(Auth::user()->role == 'owner')
                         <li><a class="dropdown-item" href="{{ route('settings.index') }}">Settings</a></li>
                         @endif
@@ -50,8 +52,9 @@
                 </li>
             </ul>
         </nav>
+        @endauth
         <div id="layoutSidenav">
-           
+           @auth
             <div id="layoutSidenav_nav">
                 <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                     <div class="sb-sidenav-menu">
@@ -100,9 +103,10 @@
                     </div>
                 </nav>
             </div>
+            @endauth
             <div id="layoutSidenav_content">
                 @yield('content')
-
+                @auth
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid px-4">
                         <div class="d-flex align-items-center justify-content-between small">
@@ -115,8 +119,10 @@
                         </div>
                     </div>
                 </footer>
+                @endauth
             </div>
         </div>
+       
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>

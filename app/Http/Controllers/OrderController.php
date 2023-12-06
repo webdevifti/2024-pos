@@ -57,8 +57,11 @@ class OrderController extends Controller
                 'payment_method' => $request->payment_method,
             ]);
             $order_detail = [];
+
             foreach($request->product_id as $index => $item){
+                
                 $order_detail[] = [
+                    'product_name' => $request->product_name[$index],
                     'product_id' => $request->product_id[$index],
                     'quantity' => $request->quantity[$index],
                     'price' => $request->price[$index],
@@ -70,7 +73,8 @@ class OrderController extends Controller
                 'order_id' => $order->id,
                 'order_detail' => json_encode($order_detail)
             ]);
-            return back()->with('success','Completed');
+            // return back()->with('success','Completed');
+            return redirect()->route('pos.invoice', $order->id);
         }catch(Exception $e){
             return back()->with('error','Something happened wrong');
         }
@@ -126,5 +130,12 @@ class OrderController extends Controller
         $get_active_product = Product::where('status', 1)->get();
         $get_active_customer = Customer::where('status',1)->get();
         return view('pos.index',compact('get_active_product','get_active_customer'));
+    }
+
+    public function posInvoice($order_id){
+        // dd($order_id);
+        $order = Order::findOrFail($order_id);
+        $order_detail = OrderDetail::where('order_id', $order_id)->first();
+        return view('pos.invoice', compact('order','order_detail'));
     }
 }
