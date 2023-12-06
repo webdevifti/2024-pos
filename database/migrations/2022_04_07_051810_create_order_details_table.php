@@ -16,12 +16,15 @@ return new class extends Migration
         Schema::create('order_details', function (Blueprint $table) {
             $table->id();
             $table->integer('order_id');
-            $table->integer('product_id');
-            $table->integer('quantity');
-            $table->integer('unit_price');
-            $table->integer('amount');
-            $table->integer('discount');
+            $table->text('order_detail');
+            // $table->integer('product_id');
+            // $table->integer('quantity');
+            // $table->integer('price');
+            // $table->integer('unit');
+            // $table->integer('discount');
+            // $table->integer('subtotal');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

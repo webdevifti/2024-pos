@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
 use App\Models\Order;
+use App\Models\OrderDetail;
 use App\Models\Product;
+use Exception;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -38,7 +41,40 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         //
-        dd($request->all());
+        $request->validate([
+            'product_id' => 'required',
+            'total_amount' => 'required',
+            'paid_amount' => 'required',
+            'customer_id' => 'required',
+        ]);
+        try{
+
+            $order = Order::create([
+                'customer_id' => $request->customer_id,
+                'total_amount' => $request->total_amount,
+                'paid_amount' => $request->paid_amount,
+                'due' => $request->due,
+                'payment_method' => $request->payment_method,
+            ]);
+            $order_detail = [];
+            foreach($request->product_id as $index => $item){
+                $order_detail[] = [
+                    'product_id' => $request->product_id[$index],
+                    'quantity' => $request->quantity[$index],
+                    'price' => $request->price[$index],
+                    'discount' => $request->discount[$index],
+                    'sub_total' => $request->sub_total[$index],
+                ];
+            }
+            OrderDetail::create([
+                'order_id' => $order->id,
+                'order_detail' => json_encode($order_detail)
+            ]);
+            return back()->with('success','Completed');
+        }catch(Exception $e){
+            return back()->with('error','Something happened wrong');
+        }
+
     }
 
     /**
@@ -88,6 +124,7 @@ class OrderController extends Controller
 
     public function pos(){
         $get_active_product = Product::where('status', 1)->get();
-        return view('pos.index',compact('get_active_product'));
+        $get_active_customer = Customer::where('status',1)->get();
+        return view('pos.index',compact('get_active_product','get_active_customer'));
     }
 }
