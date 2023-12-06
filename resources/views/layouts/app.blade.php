@@ -13,18 +13,13 @@
         <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
        
     </head>
-    <body class="sb-nav-fixed  @if(request()->is('pos/orders')) sb-sidenav-toggled @endif">
+    <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
             <!-- Navbar Brand-->
             <a class="navbar-brand ps-3" href="{{ route('home') }}">Pos</a>
             <!-- Sidebar Toggle-->
-            @if(!request()->is('pos/orders')) 
+          
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
-           @endif
-            @if(request()->is('pos/orders')) 
-            <a class="nav-link" href="{{ route('home') }}">Dashboard</a>
-            <a class="nav-link" href="{{ route('products.index') }}">Producs</a>
-            @endif
             <!-- Navbar Search-->
             {{-- <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
                 <div class="input-group">
@@ -56,7 +51,7 @@
             </ul>
         </nav>
         <div id="layoutSidenav">
-            @if(!request()->is('pos/orders'))
+           
             <div id="layoutSidenav_nav">
                 <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                     <div class="sb-sidenav-menu">
@@ -105,7 +100,6 @@
                     </div>
                 </nav>
             </div>
-            @endif
             <div id="layoutSidenav_content">
                 @yield('content')
 

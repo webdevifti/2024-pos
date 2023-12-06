@@ -64,7 +64,8 @@
                  Company List
             </div>
             <div class="card-body">
-                <table id="datatablesSimple">
+                <div class="table-responsive">
+                <table id="datatablesSimple" class="table">
                     <thead>
                         <tr>
                             <th>Name</th>
@@ -187,6 +188,7 @@
                         @endforeach
                     </tbody>
                 </table>
+            </div>
             </div>
         </div>
     </div>
