@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zxx">
 <head>
-    <title></title>
+    <title>Invoice</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
 
@@ -42,12 +42,12 @@
                         <div class="row">
                             <div class="col-sm-6">
                                 <div class="invoice-number">
-                                    <h3>Invoice Number: #45613</h3>
+                                    <h3>Invoice Number: {{$order->invoice_number  }}</h3>
                                 </div>
                             </div>
                             <div class="col-sm-6 text-end">
                                 <div class="invoice-date">
-                                    <h3>Invoice Date: 24 Jan 2022</h3>
+                                    <h3>Invoice Date: {{ date('d M Y',strtotime($order->created_at)) }}</h3>
                                 </div>
                             </div>
                         </div>
@@ -82,7 +82,7 @@
                             </div>
                             <div class="col-sm-6 text-end mb-3">
                                 <h4 class="inv-title-1">Payment Method</h4>
-                                <p class="inv-from-1">{{ $order->payment_method }}</p>
+                                <p class="inv-from-1">{{ ucfirst($order->payment_method) }}</p>
                             </div>
                         </div>
                     </div>
@@ -94,51 +94,78 @@
                                     <th>Item</th>
                                     <th class="text-center">Price</th>
                                     <th class="text-center">Quantity</th>
-                                    <th class="text-center">Discount</th>
+                                    <th class="text-center">Discount %</th>
                                     <th class="text-right">Totals</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                     @php
                                         $detail = json_decode($order_detail->order_detail);
+                                        $subTotal = 0;
                                     @endphp
+                                    
                                     @foreach($detail as $item)
+                                        @php
+                                            $subTotal += $item->sub_total;
+                                        @endphp
                                 <tr>
                                     <td>
                                         <div class="item-desc-1">
+                                           
                                             <small>{{ $item->product_name }}</small>
                                         </div>
                                     </td>
-                                    <td class="text-center">$10.99</td>
-                                    <td class="text-center">1</td>
-                                    <td class="text-center">1</td>
-                                    <td class="text-right">$10.99</td>
+                                    <td class="text-center">{{ $item->price }}</td>
+                                    <td class="text-center">{{ $item->quantity }}</td>
+                                    <td class="text-center">{{ $item->discount }}</td>
+                                    <td class="text-right">{{ $item->sub_total }}</td>
                                 </tr>
                                 @endforeach
                                
                                 <tr>
                                     <td colspan="4" class="text-end">SubTotal</td>
-                                    <td class="text-right">$710.99</td>
+                                    <td class="text-right">{{ $subTotal }}</td>
                                 </tr>
+                                @if($order->tax_amount )
                                 <tr>
                                     <td colspan="4" class="text-end">Tax</td>
-                                    <td class="text-right">$85.99</td>
+                                    <td class="text-right">{{ $order->tax_amount }} ( {{ $order->tax_rate }}% )</td>
                                 </tr>
+                                @endif
+                                @if($order->discount_amount)
                                 <tr>
                                     <td colspan="4" class="text-end">Discount</td>
-                                    <td class="text-right">$85.99</td>
+                                    <td class="text-right">{{ $order->discount_amount }} ( {{ $order->discount_rate}}% )</td>
                                 </tr>
+                                @endif
                                 <tr>
                                     <td colspan="4" class="text-end fw-bold">Grand Total</td>
                                     <td class="text-right fw-bold">{{ $order->total_amount }}</td>
                                 </tr>
+
+                                <tr>
+                                    <td colspan="4" class="text-end fw-bold">Paid</td>
+                                    <td class="text-right fw-bold">
+                                        @if($order->paid_amount == $order->total_amount)
+                                        <span class="badge text-success">Full Paid</span>
+                                        @else 
+                                        {{ $order->paid_amount }}
+                                        @endif
+                                    </td>
+                                </tr>
+                                @if($order->paid_amount < $order->total_amount)
+                                <tr>
+                                    <td colspan="4" class="text-end fw-bold">Due</td>
+                                    <td class="text-right fw-bold"><span class="badge text-danger">{{ $order->due }}</span></td>
+                                </tr>
+                                @endif
                                 </tbody>
                             </table>
                         </div>
                     </div>
                     <div class="invoice-informeshon">
                         <div class="row">
-                            <div class="col-md-4 col-sm-4">
+                            {{-- <div class="col-md-4 col-sm-4">
                                 <div class="payment-info mb-30">
                                     <h3 class="inv-title-1">Payment Info</h3>
                                     <ul class="bank-transfer-list-1">
@@ -147,15 +174,15 @@
                                         <li><strong>Branch Name:</strong> xyz</li>
                                     </ul>
                                 </div>
-                            </div>
-                            <div class="col-md-4 col-sm-4">
-                                <div class="terms-and-condistions mb-30">
+                            </div> --}}
+                            <div class="col-md-6 col-sm-12">
+                                <div class="terms-and-condistions mb-3">
                                     <h3 class="inv-title-1">Terms and Condistions</h3>
                                     <p class="mb-0">Once order done, money can't refund. Delivery might delay due to</p>
                                 </div>
                             </div>
-                            <div class="col-md-4 col-sm-4">
-                                <div class="nates mb-30">
+                            <div class="col-md-6 col-sm-12">
+                                <div class="nates mb-3">
                                     <h4 class="inv-title-1">Notes</h4>
                                     <p class="text-muted">This is computer generated invoice and physical signature</p>
                                 </div>

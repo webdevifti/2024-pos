@@ -50,11 +50,16 @@ class OrderController extends Controller
         try{
 
             $order = Order::create([
+                'invoice_number' => '#'.date('ymdh').'_'.rand(111111,999999),
                 'customer_id' => $request->customer_id,
                 'total_amount' => $request->total_amount,
                 'paid_amount' => $request->paid_amount,
                 'due' => $request->due,
                 'payment_method' => $request->payment_method,
+                'tax_rate' => $request->tax_rate,
+                'tax_amount' => $request->tax_amount,
+                'discount_rate' => $request->discount_rate,
+                'discount_amount' => $request->discount_amount,
             ]);
             $order_detail = [];
 
@@ -73,10 +78,10 @@ class OrderController extends Controller
                 'order_id' => $order->id,
                 'order_detail' => json_encode($order_detail)
             ]);
-            // return back()->with('success','Completed');
-            return redirect()->route('pos.invoice', $order->id);
+          
+           return redirect()->route('pos.invoice', $order->id);
         }catch(Exception $e){
-            return back()->with('error','Something happened wrong');
+           return back()->with('error','Something happened wrong');
         }
 
     }

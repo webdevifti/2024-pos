@@ -35,13 +35,14 @@
                                             <tr class="product_row">
                                                 <td>1</td>
                                                 <td id="product_loop" width="40%">
-
+                                                    <input type="hidden" name="product_name" class="product_name_class">
                                                     <select name="product_id[]" id="product_id"
                                                         class="form-control product_id productSelecta product_names"
                                                         required>
                                                         <option value="">--select product--</option>
                                                         @foreach ($get_active_product as $item)
                                                             <option 
+                                                                data-productname="{{ $item->product_name }}"
                                                                 data-price="{{ $item->price }}"
                                                                 value="{{ $item->id }}">{{ $item->product_name }}
                                                             </option>
@@ -82,21 +83,34 @@
                             <div class="card-body">
                                 <strong>
                                     Total Amount
-                                    <h4 class="total_amount"></h4>
+                                    <h4 class="total_amount text-success"></h4>
                                 </strong>
                                 <input type="hidden" value="" name="total_amount" id="totalcost" required>
-                                <h5 class="text-info">Choose Payment Method</h5>
+                                <h6 class="text-info">Choose Payment Method</h6>
                                 <label for="cash" class="form-check-label">
                                     <input type="radio" class="form-check-input" id="cash" name="payment_method"
                                         value="cash" checked> Cash</label><br>
                                 <label for="bank" class="form-check-label">
                                     <input type="radio" class="form-check-input" id="bank" name="payment_method"
                                         value="bank"> Bank</label><br>
-
-                                <label for="">Paid</label>
-                                <input type="text" class="form-control payable" name="paid_amount" required>
-                                <label for="">Due</label>
-                                <input type="text" class="form-control due" name="due" readonly>
+                                    <hr>
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <label for="">Tax %</label>
+                                                <input type="text" class="form-control tax_rate" name="tax_rate">
+                                               <input type="hidden" name="tax_amount" class="tax_amount">
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <label for="">Discount %</label>
+                                                <input type="text" class="form-control discount_rate" name="discount_rate">
+                                                <input type="hidden" name="discount_amount" class="discount_amount">
+                                            </div>
+                                        </div>
+                                    <hr>
+                                    <label for="">Paid</label>
+                                    <input type="text" class="form-control payable" name="paid_amount" required>
+                                    <label for="">Due</label>
+                                    <input type="text" class="form-control due" name="due" readonly>
                                 <label for="">Change</label>
                                 <input type="text" class="form-control return" name="return" readonly>
 
@@ -183,12 +197,15 @@
                 total += amount;
             });
             $('.total_amount').html(total);
+            $('#totalcost').val(total);
         }
 
         $('.addMoreProduct').delegate('.product_id', 'change', function() {
             var tr = $(this).parent().parent();
             var price = tr.find('.product_id option:selected').attr('data-price');
             tr.find('.price').val(price);
+            var pname = tr.find('.product_id option:selected').attr('data-productname');
+            tr.find('.product_name_class').val(pname);
 
             var qty = tr.find('.quantity').val() - 0;
             var discount = tr.find('.discount').val() - 0;
@@ -210,22 +227,52 @@
         });
 
         $('.payable').on('keyup', function() {
-            var total = 0;
+          
             $('.due').val('');
             $('.return').val('');
-            $('.sub_total').each(function(i, e) {
-                var amount = $(this).val() - 0;
-                total += amount;
-            });
-            var a = $('#totalcost').val(total);
+           
+            var a = $('#totalcost').val();
             var b = $('.payable').val();
-            if (parseInt(a.val()) > parseInt(b)) {
+            if (parseFloat(a) > parseFloat(b)) {
+                let due = parseFloat(a) - parseFloat(b);
+                let due_amount = due.toFixed(2);
+                $('.due').val(due_amount);
+            } else if (parseFloat(a) < parseFloat(b)) {
+                let backmoney = parseFloat(b) - parseFloat(a);
+                let back_amount = backmoney.toFixed(2);
+                $('.return').val(back_amount);
+            }
+        });
 
-                var due = parseInt(a.val()) - parseInt(b);
-                $('.due').val(due);
-            } else if (parseInt(a.val()) < parseInt(b)) {
-                var backmoney = parseInt(b) - parseInt(a.val());
-                $('.return').val(backmoney);
+        $('.tax_rate').on('keyup', function(){
+            let tax_rate = $(this).val();
+            let total = $('#totalcost').val();
+            let tax_amount = parseFloat(tax_rate) / 100 * parseFloat(total);
+            let newTotal = parseFloat(tax_amount) + parseFloat(total);
+            let grandTotal = parseFloat(newTotal).toFixed(2);
+            if(tax_rate > 0){
+                $('#totalcost').val(grandTotal);
+                $('.total_amount').html(grandTotal);
+                $('.tax_amount').val(tax_amount);
+
+            }else{
+                totalAmount();
+            }
+
+        });
+        $('.discount_rate').on('keyup', function(){
+            let discount_rate = $(this).val();
+            let total = $('#totalcost').val();
+            let discount_amount = parseFloat(discount_rate) / 100 * parseFloat(total);
+            let newTotal = parseFloat(total) - parseFloat(discount_amount) ;
+            let grandTotal = parseFloat(newTotal).toFixed(2);
+            if(discount_rate > 0){
+                $('#totalcost').val(grandTotal);
+                $('.total_amount').html(grandTotal);
+                $('.discount_amount').val(discount_amount);
+
+            }else{
+                totalAmount();
             }
         });
     </script>

@@ -15,11 +15,16 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
+            $table->string('invoice_number',20)->nullable();
             $table->integer('customer_id')->nullable();
             $table->double('total_amount',30,2)->nullable();
             $table->double('paid_amount',30,2)->nullable();
             $table->double('due',30,2)->nullable();
             $table->string('payment_method')->nullable();
+            $table->float('tax_rate',10,2)->nullable();
+            $table->double('tax_amount',30,2)->nullable();
+            $table->float('discount_rate',20,2)->nullable();
+            $table->double('discount_amount',30,2)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
