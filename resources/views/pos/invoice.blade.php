@@ -50,8 +50,12 @@
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="logo">
-                                        <img src="{{ asset('dashboard/invoice/assets/img/logos/logo.png') }}"
-                                            alt="logo">
+                                        @if (get_option('site_logo'))
+                                            <img src="{{ asset('uploads/logo/' . get_option('site_logo')) }}"
+                                                alt="logo">
+                                        @else
+                                            <h3>{{ get_option('site_name') }}</h3>
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
