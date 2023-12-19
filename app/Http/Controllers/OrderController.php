@@ -141,6 +141,7 @@ class OrderController extends Controller
         // dd($order_id);
         $order = Order::findOrFail($order_id);
         $order_detail = OrderDetail::where('order_id', $order_id)->first();
-        return view('pos.invoice', compact('order','order_detail'));
+        $customer_detail = Customer::findOrFail($order->customer_id);
+        return view('pos.invoice', compact('order','order_detail', 'customer_detail'));
     }
 }

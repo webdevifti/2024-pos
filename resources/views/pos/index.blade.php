@@ -99,7 +99,8 @@
                             <div class="card-body">
                                 <strong>
                                     Total Amount
-                                    <h4 class="total_amount text-success"></h4>
+                                  
+                                    <h4 class=" text-success">{{ get_option('currency_icon') }}<span class="total_amount"></span></h4>
                                 </strong>
                                 <input type="hidden" value="" name="total_amount" id="totalcost" required>
                                 <h6 class="text-info">Choose Payment Method</h6>

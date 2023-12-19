@@ -85,9 +85,10 @@
                                     <div class="invoice-number">
                                         <h4 class="inv-title-1">Invoice To</h4>
                                         <p class="invo-addr-1">
-                                            Theme Vessel <br />
-                                            info@themevessel.com <br />
-                                            21-12 Green Street, Meherpur, Bangladesh <br />
+                                            {{ $customer_detail->phone_number }}<br />
+                                            {{ $customer_detail->email }} <br />
+                                            {{ $customer_detail->address }} <br />
+                                           
                                         </p>
                                     </div>
                                 </div>
@@ -95,19 +96,19 @@
                                     <div class="invoice-number text-end">
                                         <h4 class="inv-title-1">Bill To</h4>
                                         <p class="invo-addr-1">
-                                            Apexo Inc <br />
-                                            billing@apexo.com <br />
-                                            169 Teroghoria, Bangladesh <br />
+                                                {{ get_option('site_name') }} <br />
+                                            {{ get_option('email') }}<br />
+                                            {{ get_option('address') }} <br />
                                         </p>
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-sm-6 mb-3">
+                                {{-- <div class="col-sm-6 mb-3">
                                     <h4 class="inv-title-1">Date</h4>
                                     <p class="inv-from-1">Due Date:21/09/2021</p>
-                                </div>
-                                <div class="col-sm-6 text-end mb-3">
+                                </div> --}}
+                                <div class="col-sm-6 mb-3">
                                     <h4 class="inv-title-1">Payment Method</h4>
                                     <p class="inv-from-1">{{ ucfirst($order->payment_method) }}</p>
                                 </div>
@@ -142,34 +143,34 @@
                                                         <small>{{ $item->product_name }}</small>
                                                     </div>
                                                 </td>
-                                                <td class="text-center">{{ $item->price }}</td>
+                                                <td class="text-center">{{ get_option('currency_icon') }}{{ $item->price }}</td>
                                                 <td class="text-center">{{ $item->quantity }}</td>
                                                 <td class="text-center">{{ $item->discount }}</td>
-                                                <td class="text-right">{{ $item->sub_total }}</td>
+                                                <td class="text-right">{{ get_option('currency_icon') }}{{ $item->sub_total }}</td>
                                             </tr>
                                         @endforeach
 
                                         <tr>
                                             <td colspan="4" class="text-end">SubTotal</td>
-                                            <td class="text-right">{{ $subTotal }}</td>
+                                            <td class="text-right">{{ get_option('currency_icon') }}{{ $subTotal }}</td>
                                         </tr>
                                         @if ($order->tax_amount)
                                             <tr>
                                                 <td colspan="4" class="text-end">Tax</td>
-                                                <td class="text-right">{{ $order->tax_amount }} (
+                                                <td class="text-right">{{ get_option('currency_icon') }}{{ $order->tax_amount }} (
                                                     {{ $order->tax_rate }}% )</td>
                                             </tr>
                                         @endif
                                         @if ($order->discount_amount)
                                             <tr>
                                                 <td colspan="4" class="text-end">Discount</td>
-                                                <td class="text-right">{{ $order->discount_amount }} (
+                                                <td class="text-right">{{ get_option('currency_icon') }}{{ $order->discount_amount }} (
                                                     {{ $order->discount_rate }}% )</td>
                                             </tr>
                                         @endif
                                         <tr>
                                             <td colspan="4" class="text-end fw-bold">Grand Total</td>
-                                            <td class="text-right fw-bold">{{ $order->total_amount }}</td>
+                                            <td class="text-right fw-bold">{{ get_option('currency_icon') }}{{ $order->total_amount }}</td>
                                         </tr>
 
                                         <tr>
@@ -178,7 +179,7 @@
                                                 @if ($order->paid_amount == $order->total_amount)
                                                     <span class="badge text-success">Full Paid</span>
                                                 @else
-                                                    {{ $order->paid_amount }}
+                                                {{ get_option('currency_icon') }}{{ $order->paid_amount }}
                                                 @endif
                                             </td>
                                         </tr>
@@ -186,7 +187,7 @@
                                             <tr>
                                                 <td colspan="4" class="text-end fw-bold">Due</td>
                                                 <td class="text-right fw-bold"><span
-                                                        class="badge text-danger">{{ $order->due }}</span></td>
+                                                        class="badge text-danger">{{ get_option('currency_icon') }}{{ $order->due }}</span></td>
                                             </tr>
                                         @endif
                                     </tbody>
@@ -226,11 +227,12 @@
                             <div class="row g-0">
                                 <div class="col-lg-9 col-md-11 col-sm-12">
                                     <div class="contact-info">
-                                        <a href="tel:+55-4XX-634-7071"><i class="fa fa-phone"></i> +00 123 647 840</a>
-                                        <a href="tel:info@themevessel.com"><i class="fa fa-envelope"></i>
-                                            info@themevessel.com</a>
-                                        <a href="tel:info@themevessel.com" class="mr-0 d-none-580"><i
-                                                class="fa fa-map-marker"></i> 169 Teroghoria, Bangladesh</a>
+                                        <a href="tel:{{ get_option('phone') }}"><i class="fa fa-phone"></i> {{ get_option('phone') }}</a>
+                                        <a href="mail:{{ get_option('email') }}"><i class="fa fa-envelope"></i>
+                                            {{ get_option('email') }}
+                                        </a>
+                                        <a href="javascript:void(0)" class="mr-0 d-none-580"><i
+                                                class="fa fa-map-marker"></i> {{ get_option('address') }}</a>
                                     </div>
                                 </div>
                             </div>
