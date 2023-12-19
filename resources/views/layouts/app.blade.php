@@ -72,6 +72,11 @@
                                 Pos
                             </a>
                            
+                            <a class="nav-link {{ (request()->is('/orders') ? 'active': '') }}" href="{{ route('orders.index') }}">
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-cart-shopping"></i></div>
+                                Orders
+                            </a>
+                           
                             <a class="nav-link {{ (request()->is('products') ? 'active': '') }}" href="{{ route('products.index') }}">
                                 <div class="sb-nav-link-icon"><i class="fa-brands fa-product-hunt"></i></div>
                                 Products

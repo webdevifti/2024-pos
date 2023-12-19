@@ -19,6 +19,8 @@ class OrderController extends Controller
     public function index()
     {
         //
+        $orders = Order::orderBy('created_at','desc')->get();
+        return view('orders.index', compact('orders'));
        
     }
 
@@ -48,7 +50,12 @@ class OrderController extends Controller
             'customer_id' => 'required',
         ]);
         try{
-
+            $payment_status = NULL;
+            if($request->paid_amount == $request->total_amount){
+                $payment_status = 'Paid';
+            }else if($request->paid_amount < $request->total_amount){
+                $payment_status = 'Due';
+            }
             $order = Order::create([
                 'invoice_number' => '#'.date('ymdh').'_'.rand(111111,999999),
                 'customer_id' => $request->customer_id,
@@ -60,6 +67,7 @@ class OrderController extends Controller
                 'tax_amount' => $request->tax_amount,
                 'discount_rate' => $request->discount_rate,
                 'discount_amount' => $request->discount_amount,
+                'payment_status' => $payment_status
             ]);
             $order_detail = [];
 
@@ -92,9 +100,10 @@ class OrderController extends Controller
      * @param  \App\Models\Order  $order
      * @return \Illuminate\Http\Response
      */
-    public function show(Order $order)
+    public function show($order)
     {
         //
+        dd($order);
     }
 
     /**
@@ -141,7 +150,7 @@ class OrderController extends Controller
         // dd($order_id);
         $order = Order::findOrFail($order_id);
         $order_detail = OrderDetail::where('order_id', $order_id)->first();
-        $customer_detail = Customer::findOrFail($order->customer_id);
-        return view('pos.invoice', compact('order','order_detail', 'customer_detail'));
+        // $customer_detail = Customer::findOrFail($order->customer_id);
+        return view('pos.invoice', compact('order','order_detail'));
     }
 }

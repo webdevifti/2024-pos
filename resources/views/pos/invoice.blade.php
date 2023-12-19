@@ -85,9 +85,10 @@
                                     <div class="invoice-number">
                                         <h4 class="inv-title-1">Invoice To</h4>
                                         <p class="invo-addr-1">
-                                            {{ $customer_detail->phone_number }}<br />
-                                            {{ $customer_detail->email }} <br />
-                                            {{ $customer_detail->address }} <br />
+                                            {{ $order->customer->fullname }}<br />
+                                            {{ $order->customer->phone_number }}<br />
+                                            {{ $order->customer->email }} <br />
+                                            {{ $order->customer->address }} <br />
                                            
                                         </p>
                                     </div>

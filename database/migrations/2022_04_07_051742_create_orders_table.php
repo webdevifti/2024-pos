@@ -25,6 +25,7 @@ return new class extends Migration
             $table->double('tax_amount',30,2)->nullable();
             $table->float('discount_rate',20,2)->nullable();
             $table->double('discount_amount',30,2)->nullable();
+            $table->string('payment_status')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
